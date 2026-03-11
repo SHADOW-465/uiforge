@@ -42,5 +42,4 @@ next-env.d.ts
 .ingest-cache.json
 /public/previews
 /sources
-/src/ingest-preview
 /.claude
