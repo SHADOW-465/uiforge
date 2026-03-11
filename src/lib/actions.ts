@@ -1,11 +1,11 @@
 "use server"
 
-import { supabase } from "@/lib/supabase"
+import { getSupabaseServerClient } from "@/lib/supabase-server"
 import type { ComponentGridItem } from "@/components/library/ComponentGrid"
 
 export async function getCategories() {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabaseServerClient()
       .from('Category')
       .select('id, name, slug, description, createdAt, updatedAt')
       .order('name')
@@ -19,7 +19,7 @@ export async function getCategories() {
 
 export async function getCategoryBySlug(slug: string) {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabaseServerClient()
       .from('Category')
       .select('id, name, slug, description, createdAt, updatedAt')
       .eq('slug', slug)
@@ -34,7 +34,7 @@ export async function getCategoryBySlug(slug: string) {
 
 export async function getComponents(categoryId?: string) {
   try {
-    let query = supabase
+    let query = getSupabaseServerClient()
       .from('Component')
       .select(`
         id, name, description,
