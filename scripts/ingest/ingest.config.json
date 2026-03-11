@@ -1,0 +1,54 @@
+{
+  "defaults": {
+    "provider": "groq",
+    "model": "llama-3.1-8b-instant",
+    "screenshot": {
+      "width": 1200,
+      "height": 800,
+      "format": "png",
+      "scale": 2
+    },
+    "quality": {
+      "minFileSizeKb": 5,
+      "minContrastStdDev": 0.01,
+      "dedupeThreshold": -1
+    }
+  },
+  "sources": {
+    "shadcn": {
+      "displayName": "shadcn/ui",
+      "kind": "react",
+      "fileGlobs": ["**/components/ui/**/*.tsx"],
+      "categoryRules": [
+        { "pattern": "accordion|tabs|modal|dialog", "category": "components" },
+        { "pattern": "navbar|menu|navigation", "category": "navigation" },
+        { "pattern": "card", "category": "cards" },
+        { "pattern": "table|data", "category": "data_ui" }
+      ]
+    },
+    "flowbite": {
+      "displayName": "Flowbite",
+      "kind": "html",
+      "fileGlobs": ["**/*.html", "**/*.tsx"],
+      "categoryRules": [
+        { "pattern": "navbar|breadcrumb|pagination|sidebar|menu", "category": "navigation" },
+        { "pattern": "hero", "category": "hero_sections" },
+        { "pattern": "pricing|plan", "category": "feature_sections" },
+        { "pattern": "card", "category": "cards" },
+        { "pattern": "footer", "category": "layouts" }
+      ]
+    },
+    "hyperui": {
+      "displayName": "HyperUI",
+      "kind": "html",
+      "fileGlobs": ["**/*.html", "**/*.md"],
+      "categoryRules": [
+        { "pattern": "hero", "category": "hero_sections" },
+        { "pattern": "feature|cta", "category": "feature_sections" },
+        { "pattern": "card|testimonial", "category": "cards" },
+        { "pattern": "nav|header", "category": "navigation" },
+        { "pattern": "footer", "category": "layouts" }
+      ]
+    }
+  }
+}

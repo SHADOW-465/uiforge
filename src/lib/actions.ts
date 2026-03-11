@@ -1,68 +1,59 @@
 "use server"
 
-import { prisma } from "@/lib/db";
+import { supabase } from "@/lib/supabase"
+import type { ComponentGridItem } from "@/components/library/ComponentGrid"
 
 export async function getCategories() {
   try {
-    const categories = await prisma.category.findMany({
-      orderBy: { name: 'asc' }
-    });
-    return categories;
+    const { data, error } = await supabase
+      .from('Category')
+      .select('id, name, slug, description, createdAt, updatedAt')
+      .order('name')
+    if (error) throw error
+    return data ?? []
   } catch (error) {
-    console.error("Failed to fetch categories:", error);
-    return [];
+    console.error("Failed to fetch categories:", error)
+    return []
   }
 }
 
 export async function getCategoryBySlug(slug: string) {
   try {
-    const category = await prisma.category.findUnique({
-      where: { slug }
-    });
-    return category;
+    const { data, error } = await supabase
+      .from('Category')
+      .select('id, name, slug, description, createdAt, updatedAt')
+      .eq('slug', slug)
+      .single()
+    if (error) throw error
+    return data
   } catch (error) {
-    console.error(`Failed to fetch category ${slug}:`, error);
-    return null;
+    console.error(`Failed to fetch category ${slug}:`, error)
+    return null
   }
 }
 
 export async function getComponents(categoryId?: string) {
   try {
-    const whereClause = categoryId ? { categoryId } : undefined;
+    let query = supabase
+      .from('Component')
+      .select(`
+        id, name, description,
+        category:Category( id, name, slug ),
+        variants:ComponentVariant( id, name, previewImage, promptFragment,
+          codeSnippet:CodeSnippet( language, code )
+        )
+      `)
+      .order('name')
 
-    const components = await prisma.component.findMany({
-      where: whereClause,
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        category: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-          },
-        },
-        variants: {
-          select: {
-            id: true,
-            name: true,
-            previewImage: true,
-            promptFragment: true,
-            codeSnippet: {
-              select: {
-                language: true,
-                code: true,
-              },
-            },
-          },
-        },
-      },
-      orderBy: { name: 'asc' }
-    });
-    return components;
+    if (categoryId) {
+      query = query.eq('categoryId', categoryId)
+    }
+
+    const { data, error } = await query
+    if (error) throw error
+    return (data ?? []) as unknown as ComponentGridItem[]
   } catch (error) {
-    console.error("Failed to fetch components:", error);
-    return [];
+    console.error("Failed to fetch components:", error)
+    return [] as ComponentGridItem[]
   }
 }

@@ -38,3 +38,9 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+# Ingestion pipeline artifacts
+.ingest-cache.json
+/public/previews
+/sources
+/src/ingest-preview
+/.claude
