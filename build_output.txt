@@ -1,0 +1,23 @@
+
+> uiforge@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 8.2s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/2) ...
+Γ£ô Generating static pages using 7 workers (2/2) in 1126.8ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî ╞Æ /
+Γö£ ╞Æ /_not-found
+Γöö ╞Æ /category/[slug]
+
+
+╞Æ  (Dynamic)  server-rendered on demand
+

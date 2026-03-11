@@ -1,0 +1,19 @@
+Starting seeding...
+PrismaClientKnownRequestError: 
+Invalid `prisma.category.upsert()` invocation in
+C:\Users\acer\Documents\projects\uiforge\prisma\seed.ts:24:44
+
+  21 ]
+  22 
+  23 for (const c of categories) {
+ΓåÆ 24   const category = await prisma.category.upsert(
+The table `public.Category` does not exist in the current database.
+    at $n.handleRequestError (C:\Users\acer\Documents\projects\uiforge\node_modules\@prisma\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (C:\Users\acer\Documents\projects\uiforge\node_modules\@prisma\client\runtime\library.js:121:6623)
+    at $n.request (C:\Users\acer\Documents\projects\uiforge\node_modules\@prisma\client\runtime\library.js:121:6307)
+    at async l (C:\Users\acer\Documents\projects\uiforge\node_modules\@prisma\client\runtime\library.js:130:9633)
+    at async main (C:\Users\acer\Documents\projects\uiforge\prisma\seed.ts:24:22) {
+  code: 'P2021',
+  clientVersion: '5.22.0',
+  meta: { modelName: 'Category', table: 'public.Category' }
+}
