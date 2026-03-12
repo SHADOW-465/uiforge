@@ -33,6 +33,7 @@ export function Navbar() {
                                 className="h-9 md:w-[300px] lg:w-[400px] pl-9 bg-muted/50 border-transparent focus-visible:bg-background"
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
+                                aria-label="Search UI patterns"
                             />
                         </div>
                     </div>
