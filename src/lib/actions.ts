@@ -1,7 +1,7 @@
 "use server"
 
 import { getSupabaseServerClient } from "@/lib/supabase-server"
-import type { ComponentGridItem } from "@/components/library/ComponentGrid"
+import type { ComponentGridItem } from "@/lib/types"
 
 export async function getCategories() {
   try {
@@ -41,7 +41,8 @@ export async function getComponents(categoryId?: string) {
         category:Category( id, name, slug ),
         variants:ComponentVariant( id, name, previewImage, promptFragment,
           codeSnippet:CodeSnippet( language, code )
-        )
+        ),
+        tags:ComponentTag( tag:Tag( id, name ) )
       `)
       .order('name')
 
