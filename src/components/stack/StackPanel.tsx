@@ -195,7 +195,7 @@ INSTRUCTIONS:
                             >
                                 {items.length === 0 ? (
                                     <div className="text-center py-10 text-muted-foreground text-sm border border-dashed rounded-lg">
-                                        Stack is empty. Add components from the library.
+                                        Add components to build your stack.
                                     </div>
                                 ) : (
                                     items.map((item, index) => (
