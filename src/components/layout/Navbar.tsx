@@ -1,11 +1,16 @@
+"use client"
+
 import Link from "next/link"
 import { Search, Sparkles } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { useSearchStore } from "@/store/useSearchStore"
 
 export function Navbar() {
+    const { query, setQuery } = useSearchStore()
+
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -26,13 +31,12 @@ export function Navbar() {
                                 type="search"
                                 placeholder="Search UI patterns..."
                                 className="h-9 md:w-[300px] lg:w-[400px] pl-9 bg-muted/50 border-transparent focus-visible:bg-background"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
                             />
                         </div>
                     </div>
                     <nav className="flex items-center space-x-2">
-                        <Button variant="outline" className="hidden border-primary/20 bg-primary/10 text-primary hover:bg-primary/20 md:flex">
-                            Generate Prompt
-                        </Button>
                         <Button variant="ghost" size="icon" className="h-9 w-9">
                             <Avatar className="h-8 w-8">
                                 <AvatarFallback>U</AvatarFallback>
