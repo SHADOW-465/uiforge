@@ -20,9 +20,7 @@ export function LivePreview({ code }: LivePreviewProps) {
             template="react-ts"
             theme="dark"
             files={{ '/App.tsx': wrappedCode }}
-            customSetup={{
-                dependencies: { tailwindcss: 'latest' },
-            }}
+            customSetup={{}}
             options={{ autorun: true }}
         >
             <SandpackPreview

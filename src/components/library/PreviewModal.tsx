@@ -31,10 +31,14 @@ interface PreviewModalProps {
 export function PreviewModal({ component, onClose, onAdd }: PreviewModalProps) {
   const [activeTab, setActiveTab] = useState<Tab>("preview")
   const [activeVariantIndex, setActiveVariantIndex] = useState(0)
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState<string | null>(null)
 
   const variant = component.variants[activeVariantIndex]
   const badgeClass = getBadgeClass(component.category.slug)
+
+  useEffect(() => {
+    setActiveVariantIndex(0)
+  }, [component.id])
 
   // Close on Escape
   useEffect(() => {
@@ -45,10 +49,14 @@ export function PreviewModal({ component, onClose, onAdd }: PreviewModalProps) {
     return () => window.removeEventListener("keydown", handler)
   }, [onClose])
 
-  const copyText = (text: string) => {
-    navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  const copyText = async (text: string, key: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(key)
+      setTimeout(() => setCopied(null), 2000)
+    } catch {
+      // clipboard write failed silently
+    }
   }
 
   return (
@@ -60,11 +68,11 @@ export function PreviewModal({ component, onClose, onAdd }: PreviewModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative z-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border/50 bg-background shadow-2xl">
+      <div role="dialog" aria-modal="true" aria-labelledby="preview-modal-title" className="relative z-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border/50 bg-background shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border/40 px-5 py-4">
           <div className="flex items-center gap-3">
-            <h2 className="text-base font-semibold">{component.name}</h2>
+            <h2 id="preview-modal-title" className="text-base font-semibold">{component.name}</h2>
             <span className={`rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${badgeClass}`}>
               {component.category.name}
             </span>
@@ -79,6 +87,7 @@ export function PreviewModal({ component, onClose, onAdd }: PreviewModalProps) {
             </button>
             <button
               onClick={onClose}
+              aria-label="Close"
               className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               <X className="h-4 w-4" />
@@ -106,10 +115,12 @@ export function PreviewModal({ component, onClose, onAdd }: PreviewModalProps) {
         )}
 
         {/* Tabs */}
-        <div className="flex border-b border-border/40">
+        <div role="tablist" className="flex border-b border-border/40">
           {(["preview", "code", "prompt"] as Tab[]).map((tab) => (
             <button
               key={tab}
+              role="tab"
+              aria-selected={activeTab === tab}
               onClick={() => setActiveTab(tab)}
               className={`px-5 py-2.5 text-xs font-medium capitalize transition-colors ${
                 activeTab === tab
@@ -157,11 +168,11 @@ export function PreviewModal({ component, onClose, onAdd }: PreviewModalProps) {
                   </span>
                 )}
                 <button
-                  onClick={() => copyText(variant?.codeSnippet?.code ?? "")}
+                  onClick={() => copyText(variant?.codeSnippet?.code ?? "", 'code')}
                   className="flex items-center gap-1 rounded bg-muted px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground"
                 >
-                  {copied ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
-                  {copied ? "Copied!" : "Copy"}
+                  {copied === 'code' ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
+                  {copied === 'code' ? "Copied!" : "Copy"}
                 </button>
               </div>
               {variant?.codeSnippet?.code ? (
@@ -179,11 +190,11 @@ export function PreviewModal({ component, onClose, onAdd }: PreviewModalProps) {
           {activeTab === "prompt" && (
             <div className="relative">
               <button
-                onClick={() => copyText(variant?.promptFragment ?? "")}
+                onClick={() => copyText(variant?.promptFragment ?? "", 'prompt')}
                 className="absolute right-3 top-3 flex items-center gap-1 rounded bg-muted px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground"
               >
-                {copied ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
-                {copied ? "Copied!" : "Copy"}
+                {copied === 'prompt' ? <Check className="h-3 w-3 text-emerald-500" /> : <Copy className="h-3 w-3" />}
+                {copied === 'prompt' ? "Copied!" : "Copy"}
               </button>
               {variant?.promptFragment ? (
                 <pre className="max-h-[360px] overflow-auto rounded-lg border border-border/50 bg-muted/30 p-4 pt-10 font-mono text-xs text-foreground/80 whitespace-pre-wrap">
